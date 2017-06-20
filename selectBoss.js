@@ -70,21 +70,8 @@ $($('.table4')[0]).find('table').find('.row').each(function(i, row) {
 var searchTerms = [];
 function addBossToSearch(value) {
     searchTerms.push(value.innerHTML);
+    $("#selectedBosses").html(searchTerms.join(", "))
 }
-
-// build the dialog for user input
-var dialogForm = "<div id='dialog-form'>\n";
-for (key in allBoss) {
-    dialogForm += "<label>" + key + "</label>\n";
-    allBoss[key].forEach(function(boss) {
-        dialogForm += "<a class='clickable' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
-    });
-};
-dialogForm += "<div id='selectedBosses'></div>"
-dialogForm += "</div>";
-
-// put dialog in dom
-$(dialogForm).insertAfter('.page');
 
 function getSearchResult() {
     searchTerms.forEach(function(boss) {
@@ -94,10 +81,24 @@ function getSearchResult() {
         }
     });
     search(searchTerms);
-    dialog.dialog("close");
+    $('#dialog-form').dialog('close');
 }
 
 function loadDialog() {
+    // build the dialog for user input
+    var dialogForm = "<div id='dialog-form'>\n";
+    _.sortBy(_.keys(allBoss)).forEach(function(key) {
+        dialogForm += "<label>" + key + "</label>\n";
+        allBoss[key].forEach(function(boss) {
+            dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
+        });
+    });
+    dialogForm += "<div id='selectedBosses'></div>"
+    dialogForm += "</div>";
+
+    // put dialog in dom
+    $(dialogForm).insertAfter('.page');
+
     var dialog = $("#dialog-form").dialog({
         autoOpen: false,
         height: 400,

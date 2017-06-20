@@ -61,5 +61,3 @@ var search = function(searchTerms) {
     $('.table4').hide();
     $('.filter-header>li').removeClass('actived');
 }
-var searchTerms = ["提灯小僧", "天邪鬼绿"]
-search(searchTerms)
