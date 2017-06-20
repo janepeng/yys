@@ -42,6 +42,9 @@ $($('.table1')[0]).find('.table').each(function(i, table) {
 	var bosses = {};
 	$(table).find('.row').each(function(i, row) {
 		var mainBoss = $(row).find('.col1').first().html();
+        if (mainBoss == "挑战") {
+            return true;
+        }
 		if (!(mainBoss in bosses)) {
 			bosses[mainBoss] = [];
 		}
@@ -182,7 +185,61 @@ dialogForm += "</div>";
 // put dialog in dom
 $(dialogForm).insertAfter('.page');
 
+function searchInDungeonChapters(dungeon, boss, name) {
+    var searchResult = [];
+    dungeon.forEach(function(chapter) {
+        var chapterSearch = {name: name+chapter.name, mainBosses: [], total: 0, maxCount: 0};
+        var count = 0;
+        chapter.bosses.forEach(function(fellowBoss) {
+            if (fellowBoss.indexOf(boss) > -1) {
+                count += parseInt(fellowBoss.split('×')[1], 10);
+            }
+        });
+        if (count) {
+            chapterSearch.total += count;
+            chapterSearch.maxCount = chapterSearch.total;
+            searchResult.push(chapterSearch);
+        }
+    });
+    return searchResult;
+}
+
+function findCommonChapter(searchResult) {
+    /*
+        name: chapter name,
+        mainBoss: boss name,
+        count: count
+    */
+    var chaptersToFight = {};
+    for (boss1 in searchResult) {
+        for (boss2 in searchResult) {
+            if (_.indexOf(_.keys(searchResult), boss1) <= _.indexOf(_.keys(searchResult), boss2)) {
+                continue;
+            }
+            var commonChapters = _.intersection(_.pluck(searchResult[boss1], 'name'), _.pluck(searchResult[boss2], 'name'));
+            commonChapters.forEach(function(chapter) {
+                var boss1Chapter = _.findWhere(searchResult[boss1], {name: chapter});
+                var boss2Chapter = _.findWhere(searchResult[boss2], {name: chapter});
+                if (boss1Chapter.maxCount > 1 || boss2Chapter.maxCount > 1) {
+                    if (!((boss1+boss2) in chaptersToFight)) {
+                        chaptersToFight[boss1+boss2] = [];
+                    }
+                    var bossCount = {};
+                    bossCount[boss1] = boss1Chapter.maxCount;
+                    bossCount[boss2] = boss2Chapter.maxCount;
+                    chaptersToFight[boss1+boss2].push({
+                        name: chapter,
+                        count: bossCount
+                    });
+                }
+            });
+        }
+    }
+    console.log(chaptersToFight)
+}
+
 function getSearchResult() {
+    var allBossSearchResult = {};
 	searchTerms.forEach(function(boss) {
 		var result = _.findWhere(misteryHints, {hint: boss});
 		if (result) {
@@ -198,7 +255,7 @@ function getSearchResult() {
 		*/
 		var searchResult = [];
 		tansuoChapters.forEach(function(chapter) {
-			var chapterSearch = {name: chapter.name, mainBosses: [], count: 0};
+			var chapterSearch = {name: chapter.name, mainBosses: [], total: 0, maxCount: 0};
 			for (var mainBoss in chapter.bosses) {
 				var count = 0;
 				chapter.bosses[mainBoss].forEach(function(fellowBoss) {
@@ -208,14 +265,22 @@ function getSearchResult() {
 				});
 				if (count) {
 					chapterSearch.mainBosses[mainBoss] = count;
-					chapterSearch.count += count;
+					chapterSearch.total += count;
+                    chapterSearch.maxCount = Math.max(chapterSearch.maxCount, count);
 				}
 			}
-			if (chapterSearch.count) {
+			if (chapterSearch.total) {
 				searchResult.push(chapterSearch);
 			}
 		});
-		console.log(searchResult)
+        // search in 御魂副本
+        searchResult = searchResult.concat(searchInDungeonChapters(yuhunChapters, boss, "御魂"));
+        // search in 妖气封印
+        searchResult = searchResult.concat(searchInDungeonChapters(yaoqifengyin, boss, "妖气封印 "));
+        // search in 秘闻副本
+        searchResult = searchResult.concat(searchInDungeonChapters(secretDungeon, boss, ""));
+        searchResult = _.sortBy(searchResult, 'maxCount');
+        allBossSearchResult[boss] = searchResult;
 	});
 }
 
