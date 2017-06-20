@@ -98,11 +98,15 @@ function loadDialog() {
 
     // put dialog in dom
     $(dialogForm).insertAfter('.page');
+    var viewWidth = document.documentElement.getBoundingClientRect().width;
+    if (viewWidth > 450) {
+        viewWidth = 450;
+    }
 
     var dialog = $("#dialog-form").dialog({
         autoOpen: false,
         height: 400,
-        width: 450,
+        width: viewWidth,
         modal: true,
         buttons: {
             "submit": getSearchResult,
