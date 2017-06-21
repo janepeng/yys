@@ -70,8 +70,7 @@ $($('.table4')[0]).find('table').find('.row').each(function(i, row) {
 var searchTerms = [];
 function addBossToSearch(value) {
     searchTerms.push(value.innerHTML);
-    // $("#selectedBosses").html(searchTerms.join(", "));
-    $('.selectorUsedToCreateTheDialog').dialog('option', searchTerms.join(", "));
+    $('#dialog-form').dialog('option', 'title', searchTerms.join(", "));
 }
 
 function getSearchResult() {
@@ -88,15 +87,12 @@ function getSearchResult() {
 function loadDialog() {
     // build the dialog for user input
     var dialogForm = "<div id='dialog-form'>\n";
-    dialogForm += "<div class='col-left'>\n";
     _.sortBy(_.keys(allBoss)).forEach(function(key) {
         dialogForm += "<label>" + key + "</label>\n";
         allBoss[key].forEach(function(boss) {
             dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
         });
     });
-    dialogForm += "</div>";
-    dialogForm += "<div id='selectedBosses' class='col-right'></div>"
     dialogForm += "</div>";
 
     // put dialog in dom
@@ -110,7 +106,7 @@ function loadDialog() {
 
     var dialog = $("#dialog-form").dialog({
         autoOpen: false,
-        height: 400,
+        height: 450,
         width: viewWidth,
         modal: true,
         buttons: {

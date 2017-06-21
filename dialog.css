@@ -6,14 +6,3 @@
 label {
     display: block;
 }
-
-.col-left {
-    width: 85%;
-    display: inline-block;
-}
-
-/* iphone 6 width is 375px, I need to display at least four characters*/
-.col-right {
-    width: 15%;
-    display: inline-block;
-}
