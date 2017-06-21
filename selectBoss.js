@@ -98,7 +98,7 @@ function loadDialog() {
 
     // put dialog in dom
     $(dialogForm).insertAfter('.page');
-    var viewWidth = document.documentElement.getBoundingClientRect().width;
+    var viewWidth = (window.innerWidth > 0) ? window.innerWidth : screen.width;
     if (viewWidth > 450) {
         viewWidth = 450;
     }
