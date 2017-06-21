@@ -5,9 +5,9 @@
 ## Getting Started
 
 在浏览器中收藏任意网页，在收藏夹中编辑你刚刚收藏的网页，命名“悬赏查询”（随便），把网址改成
-
+```
 javascript:$.getScript("https://rawgit.com/janepeng/yys/master/selectBoss.js");
-
+```
 保存。输入网址 http://www.16163.com/zt/yys/xsapp/， 点击收藏夹中的“悬赏查询”即可。
 
 ## Features
