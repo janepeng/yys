@@ -70,7 +70,8 @@ $($('.table4')[0]).find('table').find('.row').each(function(i, row) {
 var searchTerms = [];
 function addBossToSearch(value) {
     searchTerms.push(value.innerHTML);
-    $("#selectedBosses").html(searchTerms.join(", "))
+    // $("#selectedBosses").html(searchTerms.join(", "));
+    $('.selectorUsedToCreateTheDialog').dialog('option', searchTerms.join(", "));
 }
 
 function getSearchResult() {
