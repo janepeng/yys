@@ -74,13 +74,15 @@ function addBossToSearch(value) {
 }
 
 function getSearchResult() {
+    var processedSearchTerms = [];
     searchTerms.forEach(function(boss) {
         var result = _.findWhere(misteryHints, {hint: boss});
         if (result) {
             boss = result.boss;
         }
+        processedSearchTerms.push(boss);
     });
-    search(searchTerms);
+    search(processedSearchTerms);
     $('#dialog-form').dialog('close');
 }
 
@@ -93,6 +95,10 @@ function loadDialog() {
             dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
         });
     });
+    dialogForm += "<label>神秘线索</label>\n";
+    misteryHints.forEach(function(row) {
+        dialogForm += "<a class='pointer' value='" + row.boss + "' onclick='addBossToSearch(this)'>" + row.hint + "</a>\n";
+    });
     dialogForm += "</div>";
 
     // put dialog in dom
@@ -102,7 +108,6 @@ function loadDialog() {
         viewWidth = 450;
     }
     viewWidth -= 10;
-    viewWidth = 375;
 
     var dialog = $("#dialog-form").dialog({
         autoOpen: false,
