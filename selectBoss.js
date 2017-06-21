@@ -87,13 +87,15 @@ function getSearchResult() {
 function loadDialog() {
     // build the dialog for user input
     var dialogForm = "<div id='dialog-form'>\n";
+    dialogForm += "<div class='col-left'>\n";
     _.sortBy(_.keys(allBoss)).forEach(function(key) {
         dialogForm += "<label>" + key + "</label>\n";
         allBoss[key].forEach(function(boss) {
             dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
         });
     });
-    dialogForm += "<div id='selectedBosses'></div>"
+    dialogForm += "</div>";
+    dialogForm += "<div id='selectedBosses' class='col-right'></div>"
     dialogForm += "</div>";
 
     // put dialog in dom
@@ -102,6 +104,8 @@ function loadDialog() {
     if (viewWidth > 450) {
         viewWidth = 450;
     }
+    viewWidth -= 10;
+    viewWidth = 375;
 
     var dialog = $("#dialog-form").dialog({
         autoOpen: false,
