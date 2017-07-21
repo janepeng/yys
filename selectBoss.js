@@ -31,7 +31,7 @@ function categorizeBoss(boss, allBoss) {
     if (!(category in allBoss)) {
         allBoss[category] = [];
     }
-    allBoss[category].push(bossName);
+    allBoss[category].push(boss);
 }
 
 var allBoss = {};
