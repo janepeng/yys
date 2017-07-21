@@ -1,15 +1,49 @@
 
+// 神秘线索
+/*
+    hint: '水池'
+    boss: '鲤鱼精'
+    places: ['第7章', '御魂2/3/9', null]
+*/
+var misteryHints = [];
+$($('.table4')[0]).find('table').find('.row').each(function(i, row) {
+    var hint = $($(row).find('.col1')[0]).html();
+    var boss = $($(row).find('.col2')[0]).html();
+    var places = [];
+    $(row).find('td').not('[data-searchable]').each(function(i, place) {
+        place = $(place).html();
+        if (place == '-') {
+            place = null;
+        }
+        places.push(place);
+    });
+    var hint = {
+        'hint': hint,
+        'boss': boss,
+        'places': places
+    }
+    misteryHints.push(hint);
+});
+// console.log(misteryHints)
+
+function categorizeBoss(boss, allBoss) {
+    var category = $.Pinyin({value: boss})[0];
+    if (!(category in allBoss)) {
+        allBoss[category] = [];
+    }
+    allBoss[category].push(bossName);
+}
+
 var allBoss = {};
 function loadAllBoss() {
     $('.ss-content').each(function(i, element) {
         $(element).find('span').each(function(j, boss) {
             var bossName = $(boss).html();
-            var category = $.Pinyin({value: bossName})[0];
-            if (!(category in allBoss)) {
-                allBoss[category] = [];
-            }
-            allBoss[category].push(bossName);
+            categorizeBoss(bossName, allBoss);
         });
+    });
+    misteryHints.forEach(function(row) {
+        categorizeBoss(row.hint, allBoss);
     });
     return allBoss;
 }
@@ -39,33 +73,6 @@ $.when(
     loadDialog();
 });
 
-// 神秘线索
-/*
-    hint: '水池'
-    boss: '鲤鱼精'
-    places: ['第7章', '御魂2/3/9', null]
-*/
-var misteryHints = [];
-$($('.table4')[0]).find('table').find('.row').each(function(i, row) {
-    var hint = $($(row).find('.col1')[0]).html();
-    var boss = $($(row).find('.col2')[0]).html();
-    var places = [];
-    $(row).find('td').not('[data-searchable]').each(function(i, place) {
-        place = $(place).html();
-        if (place == '-') {
-            place = null;
-        }
-        places.push(place);
-    });
-    var hint = {
-        'hint': hint,
-        'boss': boss,
-        'places': places
-    }
-    misteryHints.push(hint);
-});
-// console.log(misteryHints)
-
 // custom search
 var searchTerms = [];
 function addBossToSearch(value) {
@@ -92,7 +99,12 @@ function loadDialog() {
     _.sortBy(_.keys(allBoss)).forEach(function(key) {
         dialogForm += "<label>" + key + "</label>\n";
         allBoss[key].forEach(function(boss) {
-            dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
+            var misteryHint = _.findWhere(misteryHints, {hint: boss});
+            if (misteryHint) {
+                dialogForm += "<a class='pointer' value='" + misteryHint.boss + "' onclick='addBossToSearch(this)'>" + misteryHint.hint + "</a>\n";
+            } else {
+                dialogForm += "<a class='pointer' value='" + boss + "' onclick='addBossToSearch(this)'>" + boss + "</a>\n";
+            }
         });
     });
     dialogForm += "<label>神秘线索</label>\n";

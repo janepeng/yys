@@ -8,7 +8,7 @@
 ```
 javascript:$.getScript("https://rawgit.com/janepeng/yys/master/selectBoss.js");
 ```
-保存。输入网址 http://www.16163.com/zt/yys/xsapp/， 点击收藏夹中的“悬赏查询”即可。
+保存。输入网址 http://www.16163.com/zt/yys/xsapp/ 点击收藏夹中的“悬赏查询”即可。
 
 ## Features
 
