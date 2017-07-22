@@ -106,7 +106,7 @@ function getSearchResult() {
 function removeDialog() {
     var dialogForm = document.getElementById('dialog-form');
     if (dialogForm) {
-        dialogForm.parentNode.removeChild(frameid);
+        dialogForm.parentNode.removeChild(dialogForm);
     }
 }
 
