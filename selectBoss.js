@@ -43,7 +43,14 @@ function loadAllBoss() {
         });
     });
     misteryHints.forEach(function(row) {
-        categorizeBoss(row.hint, allBoss);
+        var hints = row.hint.split('/');
+        hints.forEach(function(hint) {
+            var category = $.Pinyin({value: hint})[0];
+            if (!(category in allBoss)) {
+                allBoss[category] = [];
+            }
+            allBoss[category].push(row.hint);
+        });
     });
     return allBoss;
 }
@@ -69,6 +76,7 @@ $.when(
         $(deferred.resolve);
     })
 ).done(function() {
+    resetTables();
     loadAllBoss();
     loadDialog();
 });

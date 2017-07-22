@@ -11,6 +11,26 @@ $('.ss-content').each(function(i, element) {
     });
 });
 
+var table1 = $('.table1');
+var table2 = $('.table2');
+var table3 = $('.table3');
+var table5 = $('.table5');
+var table1Html = table1.html();
+var table2Html = table2.html();
+var table3Html = table3.html();
+var table5Html = table5.html();
+
+var resetTables = function() {
+    table1.html(table1Html);
+    table2.html(table2Html);
+    table3.html(table3Html);
+    table5.html(table5Html);
+    table1.show();
+    table2.show();
+    table3.show();
+    table5.show();
+}
+
 var searchTable = function(table, values, showRow, tableClass) {
     var showTable = false;
     table.find('.row').hide();
@@ -33,26 +53,23 @@ var searchTable = function(table, values, showRow, tableClass) {
     });
     return showTable;
 }
+
 var search = function(searchTerms) {
-    var table1 = $('.table1');
     if (searchTable(table1, searchTerms, true, '.table')) {
         table1.show();
     } else {
         table1.hide();
     }
-    var table2 = $('.table2');
     if (searchTable(table2, searchTerms, false, 'table')) {
         table2.show();
     } else {
         table2.hide();
     }
-    var table3 = $('.table3');
     if (searchTable(table3, searchTerms, false, 'table')) {
         table3.show();
     } else {
         table3.hide();
     }
-    var table5 = $('.table5');
     if (searchTable(table5, searchTerms, false, 'table')) {
         table5.show();
     } else {
