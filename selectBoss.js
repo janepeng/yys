@@ -76,6 +76,8 @@ $.when(
         $(deferred.resolve);
     })
 ).done(function() {
+    searchTerms = [];
+    removeDialog();
     resetTables();
     loadAllBoss();
     loadDialog();
@@ -99,6 +101,13 @@ function getSearchResult() {
     });
     search(processedSearchTerms);
     $('#dialog-form').dialog('close');
+}
+
+function removeDialog() {
+    var dialogForm = document.getElementById('dialog-form');
+    if (dialogForm) {
+        dialogForm.parentNode.removeChild(frameid);
+    }
 }
 
 function loadDialog() {
